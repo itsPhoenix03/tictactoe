@@ -1,25 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Square from './Square';
 
 const Board = () => {
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [isXTurn, setIsXTurn] = useState(false);
+
+  const handleOnClick = position => {
+    if (board[position]) return;
+
+    setBoard(prev => {
+      return prev.map((square, pos) => {
+        if (pos === position) return isXTurn ? 'X' : 'O';
+        return square;
+      });
+    });
+    setIsXTurn(prev => !prev);
+  };
+
+  const renderOnClick = position => {
+    return (
+      <Square value={board[position]} onClick={() => handleOnClick(position)} />
+    );
+  };
+
   return (
     <div className="board">
       <div className="board-row">
-        <Square value={1} />
-        <Square value={2} />
-        <Square value={3} />
+        {renderOnClick(0)}
+        {renderOnClick(1)}
+        {renderOnClick(2)}
       </div>
 
       <div className="board-row">
-        <Square value={4} />
-        <Square value={5} />
-        <Square value={6} />
+        {renderOnClick(3)}
+        {renderOnClick(4)}
+        {renderOnClick(5)}
       </div>
 
       <div className="board-row">
-        <Square value={7} />
-        <Square value={8} />
-        <Square value={9} />
+        {renderOnClick(6)}
+        {renderOnClick(7)}
+        {renderOnClick(8)}
       </div>
     </div>
   );
