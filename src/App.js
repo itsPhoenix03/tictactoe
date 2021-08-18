@@ -4,30 +4,38 @@ import { calculateWinner } from './helper';
 import './style/root.scss';
 
 const App = () => {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [isXTurn, setIsXTurn] = useState(false);
+  const [history, setHistory] = useState([
+    {
+      board: Array(9).fill(null),
+      isXTurn: true,
+    },
+  ]);
+  const [currentMove, setCurrentMove] = useState(0);
+  const current = history[currentMove];
 
-  const winner = calculateWinner(board);
+  const winner = calculateWinner(current.board);
   const massage = winner
     ? `Winner is ${winner}`
-    : `Next Player Turn ${isXTurn ? 'X' : 'O'}`;
+    : `Next Player Turn ${current.isXTurn ? 'X' : 'O'}`;
 
   const handleOnClick = position => {
-    if (board[position] || winner) return;
+    if (current.board[position] || winner) return;
 
-    setBoard(prev => {
-      return prev.map((square, pos) => {
-        if (pos === position) return isXTurn ? 'X' : 'O';
+    setHistory(prev => {
+      const last = prev[prev.length - 1];
+      const newBoard = last.board.map((square, pos) => {
+        if (pos === position) return current.isXTurn ? 'X' : 'O';
         return square;
       });
+      return prev.concat({ board: newBoard, isXTurn: !last.isXTurn });
     });
-    setIsXTurn(prev => !prev);
+    setCurrentMove(prev => prev + 1);
   };
   return (
     <div className="app">
       <h1>Tic Tac Toe</h1>
       <h2>{massage}</h2>
-      <Board board={board} handleOnClick={handleOnClick} />
+      <Board board={current.board} handleOnClick={handleOnClick} />
     </div>
   );
 };
