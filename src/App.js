@@ -5,17 +5,19 @@ import History from './components/History';
 import StatusMassage from './components/StatusMassage';
 import './style/root.scss';
 
+const NEW_GAME = [
+  {
+    board: Array(9).fill(null),
+    isXTurn: true,
+  },
+];
+
 const App = () => {
-  const [history, setHistory] = useState([
-    {
-      board: Array(9).fill(null),
-      isXTurn: true,
-    },
-  ]);
+  const [history, setHistory] = useState(NEW_GAME);
   const [currentMove, setCurrentMove] = useState(0);
   const current = history[currentMove];
 
-  const winner = calculateWinner(current.board);
+  const { winner, winningSquares } = calculateWinner(current.board);
 
   const handleOnClick = position => {
     if (current.board[position] || winner) return;
@@ -35,11 +37,23 @@ const App = () => {
     setCurrentMove(move);
   };
 
+  const newGame = () => {
+    setHistory(NEW_GAME);
+    setCurrentMove(0);
+  };
+
   return (
     <div className="app">
       <h1>Tic Tac Toe</h1>
       <StatusMassage winner={winner} current={current} />
-      <Board board={current.board} handleOnClick={handleOnClick} />
+      <Board
+        board={current.board}
+        handleOnClick={handleOnClick}
+        winningSquares={winningSquares}
+      />
+      <button type="button" onClick={newGame}>
+        Start New Game
+      </button>
       <History history={history} moveTo={moveTo} currentMove={currentMove} />
     </div>
   );
