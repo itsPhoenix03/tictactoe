@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Board from './components/Board';
 import { calculateWinner } from './helper';
 import History from './components/History';
+import StatusMassage from './components/StatusMassage';
 import './style/root.scss';
 
 const App = () => {
@@ -15,9 +16,6 @@ const App = () => {
   const current = history[currentMove];
 
   const winner = calculateWinner(current.board);
-  const massage = winner
-    ? `Winner is ${winner}`
-    : `Next Player Turn ${current.isXTurn ? 'X' : 'O'}`;
 
   const handleOnClick = position => {
     if (current.board[position] || winner) return;
@@ -40,7 +38,7 @@ const App = () => {
   return (
     <div className="app">
       <h1>Tic Tac Toe</h1>
-      <h2>{massage}</h2>
+      <StatusMassage winner={winner} current={current} />
       <Board board={current.board} handleOnClick={handleOnClick} />
       <History history={history} moveTo={moveTo} currentMove={currentMove} />
     </div>
