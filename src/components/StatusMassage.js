@@ -15,9 +15,7 @@ const StatusMassage = ({ winner, current }) => {
       {!winner && !noMoveLeft && (
         <>
           Next Player Turn{' '}
-          <span
-            className={current.isXTurn === 'X' ? 'text-green' : 'text-orange'}
-          >
+          <span className={current.isXTurn ? 'text-green' : 'text-orange'}>
             {current.isXTurn ? 'X' : 'O'}{' '}
           </span>
         </>
